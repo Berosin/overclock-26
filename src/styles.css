@@ -310,13 +310,26 @@ button, input, select { font-family: inherit; }
 /* ================= SLASH REVEAL (page transition) ================= */
 .slash-overlay { position: fixed; inset: 0; z-index: 500; pointer-events: none; }
 .slash-half {
-  position: absolute; top: 0; bottom: 0; width: 52%; background: var(--ink) center/cover no-repeat;
-  transition: transform 0.55s cubic-bezier(.76,0,.24,1);
+  position: absolute; top: 0; bottom: 0; background: var(--ink) center/cover no-repeat;
+  animation-duration: 2.0s;
+  animation-timing-function: cubic-bezier(.76,0,.24,1);
+  animation-fill-mode: forwards;
 }
-.slash-left { left: 0; clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%); transform: translateX(0); }
-.slash-right { right: 0; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%); transform: translateX(0); }
-.slash-overlay.is-closing .slash-left { transform: translateX(-105%); }
-.slash-overlay.is-closing .slash-right { transform: translateX(105%); }
+.slash-left { left: 0; width: 54%; clip-path: polygon(0 0, 100% 0, 88.889% 100%, 0 100%); animation-name: slashLeftMove; }
+.slash-right { right: 0; width: 54%; clip-path: polygon(14.815% 0, 100% 0, 100% 100%, 3.704% 100%); animation-name: slashRightMove; }
+
+@keyframes slashLeftMove {
+  0%   { transform: translateX(-105%); }
+  28%  { transform: translateX(0); }
+  55%  { transform: translateX(0); }
+  100% { transform: translateX(-105%); }
+}
+@keyframes slashRightMove {
+  0%   { transform: translateX(105%); }
+  28%  { transform: translateX(0); }
+  55%  { transform: translateX(0); }
+  100% { transform: translateX(105%); }
+}
 
 .slash-streak {
   position: absolute; top: 50%; left: 50%; width: 180vmax; height: 6px;
@@ -325,8 +338,8 @@ button, input, select { font-family: inherit; }
   transform-origin: center;
   opacity: 0;
 }
-.slash-streak.s1 { transform: translate(-50%, -50%) rotate(-24deg) scaleX(0); animation: slashCut 0.32s ease-out 0.05s forwards; }
-.slash-streak.s2 { transform: translate(-50%, -50%) rotate(18deg) scaleX(0); animation: slashCut 0.32s ease-out 0.16s forwards; }
+.slash-streak.s1 { transform: translate(-50%, -50%) rotate(-24deg) scaleX(0); animation: slashCut 0.32s ease-out 0.55s forwards; }
+.slash-streak.s2 { transform: translate(-50%, -50%) rotate(18deg) scaleX(0); animation: slashCut 0.32s ease-out 0.66s forwards; }
 @keyframes slashCut {
   0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot, -24deg)) scaleX(0); }
   15%  { opacity: 1; }
@@ -336,7 +349,7 @@ button, input, select { font-family: inherit; }
 .slash-streak.s1 { --rot: -24deg; }
 .slash-streak.s2 { --rot: 18deg; }
 
-.slash-flash { position: absolute; inset: 0; background: var(--red); opacity: 0; animation: slashFlash 0.22s ease-out 0.05s forwards; }
+.slash-flash { position: absolute; inset: 0; background: var(--red); opacity: 0; animation: slashFlash 0.22s ease-out 0.62s forwards; }
 @keyframes slashFlash { 0% { opacity: 0; } 35% { opacity: 0.55; } 100% { opacity: 0; } }
 
 /* ================= EVENT CARD extras ================= */

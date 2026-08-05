@@ -8,11 +8,16 @@ import Countdown from '../components/Countdown.jsx'
 import Footer from '../components/Footer.jsx'
 
 export default function HomePage() {
-  const [introDone, setIntroDone] = useState(false)
+  const [introDone, setIntroDone] = useState(() => sessionStorage.getItem('overclock26_intro_seen') === 'true')
+
+  const handleIntroDone = () => {
+    sessionStorage.setItem('overclock26_intro_seen', 'true')
+    setIntroDone(true)
+  }
 
   return (
     <div className="app">
-      {!introDone && <IntroSequence onDone={() => setIntroDone(true)} />}
+      {!introDone && <IntroSequence onDone={handleIntroDone} />}
 
       <Header />
       <Marquee />
