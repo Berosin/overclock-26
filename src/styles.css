@@ -310,7 +310,7 @@ button, input, select { font-family: inherit; }
 /* ================= SLASH REVEAL (page transition) ================= */
 .slash-overlay { position: fixed; inset: 0; z-index: 500; pointer-events: none; }
 .slash-half {
-  position: absolute; top: 0; bottom: 0; background: var(--ink) center/cover no-repeat;
+  position: absolute; top: 0; bottom: 0; background-color: var(--ink); background-repeat: no-repeat;
   animation-duration: 2.0s;
   animation-timing-function: cubic-bezier(.76,0,.24,1);
   animation-fill-mode: forwards;

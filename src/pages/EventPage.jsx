@@ -33,7 +33,15 @@ export default function EventPage() {
 
   return (
     <div className="app">
-      <SlashReveal key={id} leftImage={event.slashLeft} rightImage={event.slashRight} />
+      <SlashReveal
+        key={id}
+        leftImage={event.slashLeft}
+        rightImage={event.slashRight}
+        leftPosition={event.slashLeftPosition}
+        leftSize={event.slashLeftSize}
+        rightPosition={event.slashRightPosition}
+        rightSize={event.slashRightSize}
+      />
       <Header />
 
       <div className="section event-page">
