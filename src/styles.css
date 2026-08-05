@@ -1,0 +1,376 @@
+:root {
+  --paper: #f7f6f3;
+  --paper-2: #ffffff;
+  --ink: #0d0d0d;
+  --red: #d0202a;
+  --gray: #8a8a8a;
+  --gray-light: #d8d8d6;
+  --panel-border: 3px solid var(--ink);
+  --panel-shadow: 7px 7px 0 var(--ink);
+}
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; padding: 0; min-height: 100%; background: var(--ink); }
+body { font-family: 'Space Grotesk', sans-serif; color: var(--ink); }
+button, input, select { font-family: inherit; }
+
+.app {
+  position: relative;
+  background: radial-gradient(rgba(13,13,13,0.07) 1px, transparent 1px) 0 0/10px 10px, var(--paper);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.comic { border: var(--panel-border); box-shadow: var(--panel-shadow); background: var(--paper-2); position: relative; }
+.font-display { font-family: 'Reggae One', cursive; letter-spacing: 0.5px; }
+.font-mono { font-family: 'IBM Plex Mono', monospace; }
+.font-jp { font-family: 'Noto Sans JP', sans-serif; }
+
+/* ================= INTRO ================= */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  overflow: hidden;
+  animation: introExit 0.9s cubic-bezier(.76,0,.24,1) 2.6s forwards;
+}
+@keyframes introExit {
+  0%   { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 100%); }
+}
+
+.intro-speedlines {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.9) 0deg 0.5deg, transparent 0.5deg 3.6deg);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 0%, black 20%, transparent 62%);
+          mask-image: radial-gradient(circle at 50% 50%, black 0%, black 20%, transparent 62%);
+  animation: introSpeedIn 0.5s ease-out 0.15s forwards, introSpeedSpin 3s linear 0.15s forwards;
+}
+@keyframes introSpeedIn { to { opacity: 0.5; } }
+@keyframes introSpeedSpin { to { transform: rotate(35deg); } }
+
+.intro-ink-ring {
+  position: absolute;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--red);
+  filter: blur(0.5px);
+  animation: inkExpand 0.7s cubic-bezier(.2,.9,.3,1) 0.05s forwards;
+  opacity: 0.9;
+}
+@keyframes inkExpand { to { width: 220vmax; height: 220vmax; opacity: 0.14; } }
+
+.intro-title-wrap { position: relative; z-index: 3; text-align: center; opacity: 0; transform: scale(0.6); animation: introTitlePop 0.55s cubic-bezier(.2,1.4,.4,1) 0.75s forwards; }
+@keyframes introTitlePop { to { opacity: 1; transform: scale(1); } }
+
+.intro-kicker {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  color: var(--gray-light);
+  letter-spacing: 6px;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 10px;
+}
+.intro-title {
+  font-family: 'Reggae One', cursive;
+  font-size: clamp(52px, 11vw, 150px);
+  color: #fff;
+  -webkit-text-stroke: 2px var(--red);
+  letter-spacing: 2px;
+  line-height: 1;
+  margin: 0;
+}
+.intro-sub {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 500;
+  color: var(--gray-light);
+  font-size: 14px;
+  letter-spacing: 3px;
+  margin-top: 14px;
+  opacity: 0;
+  animation: introFadeIn 0.5s ease-out 1.3s forwards;
+}
+@keyframes introFadeIn { to { opacity: 1; } }
+
+.intro-skip {
+  position: absolute;
+  bottom: 30px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--gray-light);
+  opacity: 0;
+  animation: introFadeIn 0.5s ease-out 1.9s forwards;
+}
+
+.intro-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  z-index: 5;
+  pointer-events: none;
+  animation: flashPop 0.18s ease-out 2.55s forwards;
+}
+@keyframes flashPop { 0% { opacity: 0; } 40% { opacity: 0.9; } 100% { opacity: 0; } }
+
+/* ================= HEADER / LOGO ================= */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px; border-bottom: var(--panel-border);
+  background: var(--paper-2); position: sticky; top: 0; z-index: 20;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark { display: block; }
+.logo { font-family: 'Reggae One', cursive; font-size: 24px; letter-spacing: 0.5px; color: var(--ink); display: flex; align-items: baseline; gap: 8px; }
+.logo span { color: var(--red); }
+.logo .jp-tag { font-family: 'Noto Sans JP', sans-serif; font-weight: 900; font-size: 12px; color: var(--gray); letter-spacing: 2px; }
+
+.header-cta {
+  font-family: 'Reggae One', cursive; font-size: 14px; letter-spacing: 1px;
+  background: var(--ink); color: var(--paper-2); border: 2.5px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--red); padding: 8px 18px; cursor: pointer;
+  transition: transform 0.12s ease; clip-path: polygon(6% 0, 100% 0, 94% 100%, 0 100%);
+}
+.header-cta:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--red); }
+
+/* ================= MARQUEE ================= */
+.marquee-strip {
+  background: var(--ink); color: var(--paper-2); overflow: hidden; white-space: nowrap;
+  border-bottom: var(--panel-border); border-top: var(--panel-border);
+  background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 10px);
+}
+.marquee-track { display: inline-block; padding: 9px 0; animation: marquee 22s linear infinite; font-family: 'Reggae One', cursive; font-size: 17px; letter-spacing: 2px; }
+.marquee-track span { margin: 0 22px; color: var(--paper-2); }
+.marquee-track span.accent { color: var(--red); }
+.marquee-track span.jp { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; color: var(--gray-light); }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ================= SPEED LINES / LASER (hero) ================= */
+.speed-lines {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.9;
+  background: repeating-conic-gradient(from 0deg at 78% 32%, rgba(13,13,13,0.85) 0deg 0.6deg, transparent 0.6deg 4.2deg);
+  -webkit-mask-image: radial-gradient(circle at 78% 32%, black 0%, black 38%, transparent 72%);
+          mask-image: radial-gradient(circle at 78% 32%, black 0%, black 38%, transparent 72%);
+}
+/* ================= HERO ================= */
+.hero { padding: 56px 24px 40px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px; max-width: 1180px; margin: 0 auto; }
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
+.hero-panel { padding: 40px 32px; position: relative; overflow: hidden; clip-path: polygon(0 0, 100% 0, 100% 92%, 94% 100%, 0 100%); }
+.hero-inner { position: relative; z-index: 2; }
+.hero-title { font-family: 'Reggae One', cursive; font-size: clamp(46px, 6.6vw, 82px); line-height: 0.98; margin: 0 0 6px; color: var(--ink); -webkit-text-stroke: 1.5px var(--ink); }
+.hero-title .stroke-red { color: var(--red); }
+.hero-kicker { font-family: 'Noto Sans JP', sans-serif; font-weight: 900; font-size: 13px; letter-spacing: 6px; color: var(--gray); margin-bottom: 10px; display: block; }
+.hero-sub { font-size: 16.5px; max-width: 46ch; margin: 14px 0 26px; line-height: 1.55; }
+.burst {
+  position: absolute; font-family: 'Reggae One', cursive; color: var(--paper-2); background: var(--ink); padding: 8px 16px;
+  transform: rotate(-8deg); clip-path: polygon(10% 0%, 90% 0%, 100% 30%, 92% 55%, 100% 85%, 78% 100%, 55% 88%, 25% 100%, 8% 78%, 0% 45%);
+  font-size: 13px; z-index: 3; letter-spacing: 0.5px;
+}
+.burst.b1 { top: -14px; right: -6px; background: var(--red); transform: rotate(9deg); }
+.cta-primary {
+  font-family: 'Reggae One', cursive; font-size: 19px; letter-spacing: 1px; background: var(--red); color: var(--paper-2);
+  border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); padding: 14px 30px; cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease; clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
+}
+.cta-primary:hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--ink); }
+.hero-side { display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 18px; }
+.stat-tile { padding: 14px 16px; display: flex; justify-content: space-between; align-items: baseline; background: var(--paper); border-left: 4px solid var(--red); }
+.stat-tile .label { font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); }
+.stat-tile .value { font-family: 'Reggae One', cursive; font-size: 21px; color: var(--ink); }
+
+/* ================= SECTIONS ================= */
+.section { max-width: 1180px; margin: 0 auto; padding: 10px 24px 56px; }
+.section-title {
+  font-family: 'Reggae One', cursive; font-size: clamp(28px, 3.6vw, 38px); margin-bottom: 26px; display: inline-flex; align-items: center; gap: 10px;
+  background: var(--ink); color: var(--paper-2); box-shadow: 6px 6px 0 var(--red); padding: 8px 22px; clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%);
+}
+.section-title .jp-mark { font-family: 'Noto Sans JP', sans-serif; font-size: 15px; color: var(--gray-light); }
+.section-intro { max-width: 60ch; margin: -10px 0 26px; font-size: 15px; color: #333; line-height: 1.6; }
+
+/* ================= EVENTS GRID ================= */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 190px;
+  gap: 14px;
+}
+@media (max-width: 980px) { .events-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .events-grid { grid-template-columns: 1fr; grid-auto-rows: 170px; } }
+
+.event-card {
+  grid-column: span 2;
+  position: relative;
+  padding: 18px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-image: radial-gradient(rgba(13,13,13,0.05) 0.8px, transparent 0.8px);
+  background-size: 8px 8px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.event-card:nth-child(1), .event-card:nth-child(6) { grid-column: span 2; grid-row: span 2; }
+@media (max-width: 560px) { .event-card:nth-child(1), .event-card:nth-child(6) { grid-row: span 1; } }
+
+.event-card:hover { transform: translate(-3px, -3px); box-shadow: 10px 10px 0 var(--ink); }
+.event-card .ec-code { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--red); margin-bottom: 6px; }
+.event-card .ec-arc { font-family: 'Reggae One', cursive; font-size: clamp(19px, 2.4vw, 27px); line-height: 1.05; margin: 0 0 4px; -webkit-text-stroke: 0.6px var(--ink); }
+.event-card .ec-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; font-size: 12.5px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+.event-card .ec-team {
+  position: absolute; top: 14px; right: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;
+  background: var(--ink); color: var(--paper-2); padding: 3px 8px; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+}
+.event-card .ec-corner {
+  position: absolute; bottom: -22px; right: -22px; width: 70px; height: 70px; background: var(--red); opacity: 0.15;
+  clip-path: polygon(30% 0, 100% 0, 100% 70%);
+}
+
+/* ================= MODAL (page turn) ================= */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(13,13,13,0.72); z-index: 60;
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.modal-panel {
+  background: var(--paper-2); border: var(--panel-border); box-shadow: 10px 10px 0 var(--red);
+  width: 100%; max-width: 640px; max-height: 86vh; overflow-y: auto; position: relative; padding: 30px 28px;
+}
+.modal-close {
+  position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border: 2.5px solid var(--ink);
+  background: var(--paper-2); font-family: 'Reggae One', cursive; font-size: 18px; cursor: pointer; line-height: 1;
+}
+.modal-close:hover { background: var(--red); color: var(--paper-2); }
+.modal-code { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--red); letter-spacing: 2px; }
+.modal-arc { font-family: 'Reggae One', cursive; font-size: clamp(28px, 4vw, 38px); margin: 4px 0 2px; -webkit-text-stroke: 0.8px var(--ink); }
+.modal-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; color: var(--gray); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+.modal-tagline { font-style: italic; color: var(--red); font-size: 14px; margin-bottom: 18px; }
+.modal-desc { font-size: 14.5px; line-height: 1.65; margin-bottom: 20px; }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+@media (max-width: 480px) { .modal-grid { grid-template-columns: 1fr; } }
+.modal-fact { background: var(--paper); border-left: 4px solid var(--red); padding: 10px 12px; }
+.modal-fact .fk { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); display: block; }
+.modal-fact .fv { font-family: 'Reggae One', cursive; font-size: 16px; margin-top: 2px; }
+.modal-subhead { font-family: 'Reggae One', cursive; font-size: 17px; margin: 18px 0 8px; color: var(--ink); }
+.modal-list { margin: 0 0 8px; padding-left: 18px; font-size: 14px; line-height: 1.6; }
+.modal-list li { margin-bottom: 4px; }
+.modal-guidelines { font-size: 13px; color: #444; line-height: 1.6; }
+.modal-register-btn {
+  width: 100%; margin-top: 22px; font-family: 'Reggae One', cursive; font-size: 19px; letter-spacing: 1px;
+  background: var(--red); color: var(--paper-2); border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink);
+  padding: 13px; cursor: pointer; transition: transform 0.12s ease, box-shadow 0.12s ease; clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%);
+}
+.modal-register-btn:hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--ink); }
+
+/* ================= REGISTRATION FORM ================= */
+.form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.form-row label { font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); }
+.form-row input, .form-row select { font-family: 'Space Grotesk', sans-serif; font-size: 15px; padding: 11px 12px; border: 2.5px solid var(--ink); background: var(--paper); outline: none; }
+.form-row input:focus, .form-row select:focus { box-shadow: 3px 3px 0 var(--red); }
+.form-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 480px) { .form-two { grid-template-columns: 1fr; } }
+.form-error { color: var(--red); font-size: 12.5px; margin: -8px 0 14px; }
+.submit-btn {
+  width: 100%; font-family: 'Reggae One', cursive; font-size: 20px; letter-spacing: 1px; background: var(--red); color: var(--paper-2);
+  border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); padding: 13px; cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease; clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%);
+}
+.submit-btn:disabled { opacity: 0.6; cursor: wait; }
+.submit-btn:not(:disabled):hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--ink); }
+.back-link { display: inline-block; margin-bottom: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 1px; color: var(--gray); cursor: pointer; }
+.back-link:hover { color: var(--red); }
+
+.success-panel { text-align: center; padding: 10px; }
+.success-panel .stamp {
+  font-family: 'Reggae One', cursive; font-size: 40px; color: var(--paper-2); background: var(--red); transform: rotate(-4deg); display: inline-block;
+  padding: 6px 26px; margin-bottom: 14px; clip-path: polygon(4% 0, 96% 0, 100% 40%, 94% 100%, 6% 100%, 0 60%);
+}
+
+/* ================= COUNTDOWN ================= */
+.countdown-panel { padding: 26px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+.countdown-label { font-family: 'Reggae One', cursive; font-size: 20px; color: var(--red); }
+.countdown-boxes { display: flex; gap: 12px; }
+.count-box { background: var(--ink); color: var(--paper-2); font-family: 'IBM Plex Mono', monospace; font-weight: 600; border: 3px solid var(--ink); padding: 10px 14px; text-align: center; min-width: 66px; clip-path: polygon(0 0, 100% 0, 100% 82%, 82% 100%, 0 100%); }
+.count-box .n { font-size: 25px; display: block; color: var(--red); }
+.count-box .u { font-size: 10px; letter-spacing: 1px; color: var(--gray-light); text-transform: uppercase; }
+
+/* ================= FOOTER ================= */
+.footer { border-top: var(--panel-border); background: var(--ink); color: var(--paper-2); padding: 26px 24px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+.footer span { color: var(--red); }
+
+/* ================= SLASH REVEAL (page transition) ================= */
+.slash-overlay { position: fixed; inset: 0; z-index: 500; pointer-events: none; }
+.slash-half {
+  position: absolute; top: 0; bottom: 0; width: 52%; background: var(--ink) center/cover no-repeat;
+  transition: transform 0.55s cubic-bezier(.76,0,.24,1);
+}
+.slash-left { left: 0; clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%); transform: translateX(0); }
+.slash-right { right: 0; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%); transform: translateX(0); }
+.slash-overlay.is-closing .slash-left { transform: translateX(-105%); }
+.slash-overlay.is-closing .slash-right { transform: translateX(105%); }
+
+.slash-streak {
+  position: absolute; top: 50%; left: 50%; width: 180vmax; height: 6px;
+  background: linear-gradient(90deg, rgba(208,32,42,0) 0%, var(--red) 20%, #fff 50%, var(--red) 80%, rgba(208,32,42,0) 100%);
+  filter: drop-shadow(0 0 8px var(--red));
+  transform-origin: center;
+  opacity: 0;
+}
+.slash-streak.s1 { transform: translate(-50%, -50%) rotate(-24deg) scaleX(0); animation: slashCut 0.32s ease-out 0.05s forwards; }
+.slash-streak.s2 { transform: translate(-50%, -50%) rotate(18deg) scaleX(0); animation: slashCut 0.32s ease-out 0.16s forwards; }
+@keyframes slashCut {
+  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot, -24deg)) scaleX(0); }
+  15%  { opacity: 1; }
+  55%  { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot, -24deg)) scaleX(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot, -24deg)) scaleX(1); }
+}
+.slash-streak.s1 { --rot: -24deg; }
+.slash-streak.s2 { --rot: 18deg; }
+
+.slash-flash { position: absolute; inset: 0; background: var(--red); opacity: 0; animation: slashFlash 0.22s ease-out 0.05s forwards; }
+@keyframes slashFlash { 0% { opacity: 0; } 35% { opacity: 0.55; } 100% { opacity: 0; } }
+
+/* ================= EVENT CARD extras ================= */
+.event-card { text-decoration: none; color: var(--ink); }
+.ec-kanji {
+  position: absolute; right: -6px; bottom: -18px; font-family: 'Noto Sans JP', sans-serif; font-weight: 900;
+  font-size: 110px; color: var(--ink); opacity: 0.06; line-height: 1; pointer-events: none; user-select: none;
+}
+.ec-streaks {
+  position: absolute; inset: 0; opacity: 0;
+  background: repeating-linear-gradient(-35deg, rgba(208,32,42,0.5) 0 2px, transparent 2px 14px);
+  transition: opacity 0.18s ease;
+  pointer-events: none;
+}
+.event-card:hover .ec-streaks { opacity: 0.5; }
+
+/* ================= EVENT PAGE ================= */
+.event-page { padding-top: 30px; }
+.event-hero {
+  position: relative; overflow: hidden; padding: 44px 32px; margin-bottom: 30px;
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 95% 100%, 0 100%);
+}
+.event-hero-kanji {
+  position: absolute; right: 0; top: -10%; font-family: 'Noto Sans JP', sans-serif; font-weight: 900;
+  font-size: clamp(160px, 22vw, 320px); color: var(--ink); opacity: 0.05; line-height: 1; user-select: none;
+}
+.event-hero-streaks {
+  position: absolute; inset: 0; opacity: 0.5;
+  background: repeating-linear-gradient(-30deg, rgba(13,13,13,0.05) 0 2px, transparent 2px 16px);
+}
+.event-hero-inner { position: relative; z-index: 2; }
+.event-hero-arc {
+  font-family: 'Reggae One', cursive; font-size: clamp(38px, 6vw, 68px); line-height: 1; margin: 4px 0 6px;
+  -webkit-text-stroke: 1.4px var(--ink); color: var(--ink);
+}
+.event-body { max-width: 720px; }
+.register-panel { padding: 26px; margin-top: 6px; }
