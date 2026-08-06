@@ -1,8 +1,5 @@
-import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
 import { EVENTS, COMMON_GUIDELINES } from '../data/events.js'
-import RegistrationForm from '../components/RegistrationForm.jsx'
 import SlashReveal from '../components/SlashReveal.jsx'
 import Header from '../components/Header.jsx'
 import Footer from '../components/Footer.jsx'
@@ -12,7 +9,6 @@ const KANJI_WATERMARKS = ['術', '刃', '筆', '虫', '賞', '宝', '無', '絆'
 export default function EventPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [registering, setRegistering] = useState(false)
 
   const index = EVENTS.findIndex((e) => e.id === id)
   const event = EVENTS[index]
@@ -84,30 +80,9 @@ export default function EventPage() {
             Queries: {event.query.name} · {event.query.email}
           </p>
 
-          <AnimatePresence mode="wait">
-            {!registering ? (
-              <motion.button
-                key="cta"
-                className="modal-register-btn"
-                onClick={() => setRegistering(true)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                REGISTER FOR THIS ARC →
-              </motion.button>
-            ) : (
-              <motion.div
-                key="form"
-                className="comic register-panel"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-              >
-                <RegistrationForm event={event} onBack={() => setRegistering(false)} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <Link to={`/events/${id}/register`}>
+            <button className="modal-register-btn">REGISTER FOR THIS ARC →</button>
+          </Link>
         </div>
       </div>
 

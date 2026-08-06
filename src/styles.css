@@ -387,3 +387,92 @@ button, input, select { font-family: inherit; }
 }
 .event-body { max-width: 720px; }
 .register-panel { padding: 26px; margin-top: 6px; }
+
+/* ================= REGISTER PAGE (monochrome) ================= */
+.register-page { min-height: 100vh; background: var(--paper); position: relative; overflow-x: hidden; }
+.rp-wrap { max-width: 640px; margin: 0 auto; padding: 40px 24px 80px; position: relative; z-index: 2; }
+.rp-back { display: inline-block; margin-bottom: 24px; }
+
+.rp-header { text-align: center; margin-bottom: 30px; }
+.rp-code { font-size: 12px; letter-spacing: 2px; color: var(--gray); display: block; margin-bottom: 8px; }
+.rp-arc { font-family: 'Reggae One', cursive; font-size: clamp(34px, 5vw, 54px); -webkit-text-stroke: 1.2px var(--ink); margin: 0 0 4px; line-height: 1; color: var(--ink); }
+.rp-title { font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); margin-bottom: 10px; }
+.rp-team-copy { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--ink); border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); display: inline-block; padding: 6px 16px; }
+
+.rp-card { border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); background: var(--paper-2); padding: 32px 28px; }
+
+.rp-section-label { font-family: 'Reggae One', cursive; font-size: 16px; letter-spacing: 0.5px; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid var(--ink); }
+.rp-section-label-spaced { margin-top: 26px; }
+.rp-hint { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray); font-weight: 400; letter-spacing: 0; text-transform: none; }
+
+.rp-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.rp-row label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); }
+.rp-row input { font-family: 'Space Grotesk', sans-serif; font-size: 15px; padding: 11px 12px; border: 2px solid var(--ink); background: var(--paper); outline: none; }
+.rp-row input:focus { box-shadow: 3px 3px 0 var(--ink); }
+.rp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 480px) { .rp-two { grid-template-columns: 1fr; } }
+
+.rp-member-controls { display: flex; gap: 10px; margin: 4px 0 18px; }
+.rp-chip-btn {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 14px;
+  border: 2px solid var(--ink); background: var(--paper); cursor: pointer; transition: background 0.12s ease, color 0.12s ease;
+}
+.rp-chip-btn:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+.rp-chip-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.rp-error { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; border-left: 3px solid var(--ink); padding: 8px 12px; margin-bottom: 16px; background: var(--paper); }
+
+.rp-submit {
+  width: 100%; margin-top: 10px; font-family: 'Reggae One', cursive; font-size: 21px; letter-spacing: 1px;
+  background: var(--ink); color: var(--paper-2); border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--gray-light);
+  padding: 14px; cursor: pointer; transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.rp-submit:hover:not(:disabled) { background: var(--paper-2); color: var(--ink); transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); }
+.rp-submit:disabled { opacity: 0.6; cursor: wait; }
+
+.rp-success { text-align: center; padding: 10px; }
+.rp-stamp {
+  font-family: 'Reggae One', cursive; font-size: 44px; color: var(--paper-2); background: var(--ink);
+  display: inline-block; padding: 8px 30px; margin-bottom: 16px; transform: rotate(-3deg);
+  clip-path: polygon(4% 0, 96% 0, 100% 40%, 94% 100%, 6% 100%, 0 60%);
+}
+.rp-success-title { font-family: 'Reggae One', cursive; font-size: 24px; margin: 6px 0; }
+.rp-success-text { font-size: 14.5px; line-height: 1.6; }
+
+/* ================= INK SPLATTER → KANJI INTRO ================= */
+.ink-splatter-layer { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
+.ink-splat { position: absolute; transform: scale(var(--scale, 1)); }
+
+.ink-blob {
+  position: absolute; top: 0; left: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px;
+  background: var(--ink);
+  border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+  transform: rotate(var(--rot)) scale(0);
+  opacity: 0;
+  animation: inkBlobIn 1.5s ease-out var(--delay) forwards;
+}
+.ink-blob::before, .ink-blob::after {
+  content: ''; position: absolute; background: var(--ink); border-radius: 50%;
+}
+.ink-blob::before { width: 26px; height: 26px; top: -8px; left: 92px; }
+.ink-blob::after { width: 14px; height: 14px; top: 96px; left: 30px; }
+
+.ink-kanji {
+  position: absolute; top: 0; left: 0; transform: translate(-50%, -50%) scale(0.5);
+  font-size: 64px; font-weight: 900; color: var(--ink); opacity: 0;
+  animation: inkKanjiIn 1.5s ease-out var(--delay) forwards;
+  white-space: nowrap;
+}
+
+@keyframes inkBlobIn {
+  0%   { transform: rotate(var(--rot)) scale(0); opacity: 0; }
+  18%  { transform: rotate(var(--rot)) scale(1.15); opacity: 1; }
+  30%  { transform: rotate(var(--rot)) scale(1); opacity: 1; }
+  62%  { transform: rotate(var(--rot)) scale(1); opacity: 1; }
+  100% { transform: rotate(var(--rot)) scale(0.35); opacity: 0; }
+}
+@keyframes inkKanjiIn {
+  0%, 55% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  78%     { opacity: 0.16; transform: translate(-50%, -50%) scale(1.08); }
+  100%    { opacity: 0.08; transform: translate(-50%, -50%) scale(1); }
+}

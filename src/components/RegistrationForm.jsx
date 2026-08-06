@@ -1,16 +1,35 @@
 import { useState } from 'react'
+import { parseTeamSize } from '../utils/teamSize.js'
 
-// STEP 1 of the setup guide: paste your deployed Google Apps Script Web App URL here.
-// See the README section "Wiring registrations to Google Sheets" for the full walkthrough.
 const SHEET_ENDPOINT = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'
 
-export default function RegistrationForm({ event, onBack }) {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', college: '', team: '' })
+export default function RegistrationForm({ event }) {
+  const { min, max } = parseTeamSize(event.teamSize)
+  const isSolo = max === 1
+  const isFixed = min === max && !isSolo
+  const minExtra = Math.max(min - 1, 0)
+  const maxExtra = Math.max(max - 1, 0)
+
+  const [leader, setLeader] = useState({ name: '', email: '', phone: '', college: '' })
+  const [teamName, setTeamName] = useState('')
+  const [members, setMembers] = useState(() => Array.from({ length: minExtra }, () => ''))
   const [status, setStatus] = useState('idle') // idle | submitting | done | error
 
-  const handleChange = (e) => {
+  const handleLeaderChange = (e) => {
     const { name, value } = e.target
-    setForm((f) => ({ ...f, [name]: value }))
+    setLeader((f) => ({ ...f, [name]: value }))
+  }
+
+  const handleMemberChange = (i, value) => {
+    setMembers((m) => m.map((v, idx) => (idx === i ? value : v)))
+  }
+
+  const addMember = () => {
+    if (members.length < maxExtra) setMembers((m) => [...m, ''])
+  }
+
+  const removeMember = () => {
+    if (members.length > minExtra) setMembers((m) => m.slice(0, -1))
   }
 
   const handleSubmit = async (e) => {
@@ -26,16 +45,16 @@ export default function RegistrationForm({ event, onBack }) {
       eventCode: event.code,
       eventArc: event.arcName,
       eventTitle: event.title,
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      college: form.college,
-      team: form.team,
+      name: leader.name,
+      email: leader.email,
+      phone: leader.phone,
+      college: leader.college,
+      team: isSolo ? '' : teamName,
+      members: members.filter(Boolean).join(', '),
+      teamSizeDeclared: event.teamSize,
     }
 
     try {
-      // Apps Script web apps don't return CORS headers to fetch(), so we fire in
-      // no-cors mode. We can't read the response, but the row still lands in the sheet.
       await fetch(SHEET_ENDPOINT, {
         method: 'POST',
         mode: 'no-cors',
@@ -50,58 +69,89 @@ export default function RegistrationForm({ event, onBack }) {
 
   if (status === 'done') {
     return (
-      <div className="success-panel">
-        <div className="stamp">合格！</div>
-        <h3 className="font-display" style={{ fontSize: 24, margin: '6px 0' }}>
-          YOU'RE IN, {form.name.split(' ')[0] || 'CHALLENGER'}!
-        </h3>
-        <p>
+      <div className="rp-success">
+        <div className="rp-stamp">合格</div>
+        <h3 className="rp-success-title">YOU'RE IN, {leader.name.split(' ')[0] || 'CHALLENGER'}!</h3>
+        <p className="rp-success-text">
           Registered for <strong>{event.arcName}</strong> ({event.title}). A confirmation
-          will be sent to <strong>{form.email}</strong>. See you on Aug 8.
+          will be sent to <strong>{leader.email}</strong>. See you on Aug 8.
         </p>
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <span className="back-link" onClick={onBack}>← BACK TO EVENT DETAILS</span>
-
+    <form className="rp-form" onSubmit={handleSubmit}>
       {status === 'error' && (
-        <p className="form-error">
+        <p className="rp-error">
           {SHEET_ENDPOINT === 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'
-            ? 'Registration isn\'t wired up yet — the organizer needs to add the Google Sheet endpoint. See the setup guide.'
+            ? "Registration isn't wired up yet — the organizer needs to add the Google Sheet endpoint."
             : 'Something went wrong sending that — check your connection and try again.'}
         </p>
       )}
 
-      <div className="form-row">
-        <label htmlFor="name">Full Name</label>
-        <input id="name" name="name" value={form.name} onChange={handleChange} required placeholder="Jordan Rivera" />
-      </div>
-      <div className="form-two">
-        <div className="form-row">
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" name="email" value={form.email} onChange={handleChange} required placeholder="you@example.com" />
-        </div>
-        <div className="form-row">
-          <label htmlFor="phone">Phone</label>
-          <input id="phone" name="phone" value={form.phone} onChange={handleChange} required placeholder="9876543210" />
-        </div>
-      </div>
-      <div className="form-two">
-        <div className="form-row">
-          <label htmlFor="college">College</label>
-          <input id="college" name="college" value={form.college} onChange={handleChange} required placeholder="Your college name" />
-        </div>
-        <div className="form-row">
-          <label htmlFor="team">Team Name {event.teamSize.includes('1') && event.teamSize.length === 1 ? '(optional)' : ''}</label>
-          <input id="team" name="team" value={form.team} onChange={handleChange} placeholder="Team Nitro" />
-        </div>
+      <div className="rp-section-label">
+        {isSolo ? 'YOUR DETAILS' : 'TEAM LEADER'}
       </div>
 
-      <button type="submit" className="submit-btn" disabled={status === 'submitting'}>
-        {status === 'submitting' ? 'LOCKING IT IN…' : 'LOCK IT IN!'}
+      <div className="rp-row">
+        <label htmlFor="lname">Full Name</label>
+        <input id="lname" name="name" value={leader.name} onChange={handleLeaderChange} required placeholder="Jordan Rivera" />
+      </div>
+      <div className="rp-two">
+        <div className="rp-row">
+          <label htmlFor="lemail">Email</label>
+          <input id="lemail" type="email" name="email" value={leader.email} onChange={handleLeaderChange} required placeholder="you@example.com" />
+        </div>
+        <div className="rp-row">
+          <label htmlFor="lphone">Phone</label>
+          <input id="lphone" name="phone" value={leader.phone} onChange={handleLeaderChange} required placeholder="9876543210" />
+        </div>
+      </div>
+      <div className="rp-row">
+        <label htmlFor="lcollege">College</label>
+        <input id="lcollege" name="college" value={leader.college} onChange={handleLeaderChange} required placeholder="Your college name" />
+      </div>
+
+      {!isSolo && (
+        <>
+          <div className="rp-row">
+            <label htmlFor="teamname">Team Name</label>
+            <input id="teamname" value={teamName} onChange={(e) => setTeamName(e.target.value)} required placeholder="Team Nitro" />
+          </div>
+
+          <div className="rp-section-label rp-section-label-spaced">
+            TEAMMATES <span className="rp-hint">({min}–{max} total, including you)</span>
+          </div>
+
+          {members.map((val, i) => (
+            <div className="rp-row" key={i}>
+              <label htmlFor={`member-${i}`}>Member {i + 2}{i < minExtra ? '' : ' (optional)'}</label>
+              <input
+                id={`member-${i}`}
+                value={val}
+                onChange={(e) => handleMemberChange(i, e.target.value)}
+                required={i < minExtra}
+                placeholder="Full name"
+              />
+            </div>
+          ))}
+
+          {!isFixed && (
+            <div className="rp-member-controls">
+              <button type="button" onClick={addMember} disabled={members.length >= maxExtra} className="rp-chip-btn">
+                + ADD MEMBER
+              </button>
+              <button type="button" onClick={removeMember} disabled={members.length <= minExtra} className="rp-chip-btn">
+                − REMOVE
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      <button type="submit" className="rp-submit" disabled={status === 'submitting'}>
+        {status === 'submitting' ? 'LOCKING IT IN…' : 'LOCK IT IN'}
       </button>
     </form>
   )
