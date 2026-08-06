@@ -476,3 +476,7 @@ button, input, select { font-family: inherit; }
   78%     { opacity: 0.16; transform: translate(-50%, -50%) scale(1.08); }
   100%    { opacity: 0.08; transform: translate(-50%, -50%) scale(1); }
 }
+
+/* ================= WAVE INTRO (register page) ================= */
+.wave-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.rp-wave-wrap { filter: url(#rp-wave-filter); }

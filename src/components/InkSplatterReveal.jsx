@@ -7,7 +7,9 @@ const SPLATS = [
   { top: '86%', left: '72%', rot: -8, size: 0.75, kanji: '参加', delay: 0.35 },
 ]
 
-export default function InkSplatterReveal() {
+// baseDelay lets a parent (e.g. a wave intro that plays first) push the whole
+// splatter sequence later, so it starts right as the earlier animation settles.
+export default function InkSplatterReveal({ baseDelay = 0 }) {
   return (
     <div className="ink-splatter-layer" aria-hidden="true">
       {SPLATS.map((s, i) => (
@@ -19,7 +21,7 @@ export default function InkSplatterReveal() {
             left: s.left,
             '--rot': `${s.rot}deg`,
             '--scale': s.size,
-            '--delay': `${s.delay}s`,
+            '--delay': `${baseDelay + s.delay}s`,
           }}
         >
           <span className="ink-blob" />

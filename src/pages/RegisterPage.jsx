@@ -3,6 +3,9 @@ import { EVENTS } from '../data/events.js'
 import { parseTeamSize } from '../utils/teamSize.js'
 import RegistrationForm from '../components/RegistrationForm.jsx'
 import InkSplatterReveal from '../components/InkSplatterReveal.jsx'
+import WaveIntro from '../components/WaveIntro.jsx'
+
+const WAVE_DURATION = 0.9 // seconds — must match the dur values in WaveIntro.jsx
 
 export default function RegisterPage() {
   const { id } = useParams()
@@ -30,9 +33,10 @@ export default function RegisterPage() {
 
   return (
     <div className="register-page">
-      <InkSplatterReveal key={id} />
+      <WaveIntro key={`wave-${id}`} />
+      <InkSplatterReveal key={`ink-${id}`} baseDelay={WAVE_DURATION} />
 
-      <div className="rp-wrap">
+      <div className="rp-wrap rp-wave-wrap">
         <span className="back-link rp-back" onClick={() => navigate(`/events/${id}`)}>
           ← BACK TO {event.arcName}
         </span>
