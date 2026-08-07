@@ -20,7 +20,7 @@ export default function Hero() {
       <div className="comic hero-side">
         <div className="stat-tile"><span className="label font-mono">Date</span><span className="value">Aug 8, 2026</span></div>
         <div className="stat-tile"><span className="label font-mono">Format</span><span className="value">8 Events</span></div>
-        <div className="stat-tile"><span className="label font-mono">Venue</span><span className="value">Main Campus</span></div>
+        <div className="stat-tile"><span className="label font-mono">Venue</span><span className="value">Loyola ICAM college of Engineering and Technology</span></div>
         <div className="stat-tile"><span className="label font-mono">Entry</span><span className="value">Free</span></div>
       </div>
     </section>

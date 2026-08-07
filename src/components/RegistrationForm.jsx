@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { parseTeamSize } from '../utils/teamSize.js'
 
-const SHEET_ENDPOINT = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'
+const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwEIthFuYmzkLtKGkOZLJY4CgfWC-t2e61Q-HM7qKPNvJMRG3V1GBU3Q6cL3tu1fJSZ/exec'
 
 export default function RegistrationForm({ event }) {
   const { min, max } = parseTeamSize(event.teamSize)
