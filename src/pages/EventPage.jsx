@@ -6,6 +6,7 @@ import Footer from '../components/Footer.jsx'
 
 const KANJI_WATERMARKS = ['術', '刃', '筆', '虫', '賞', '宝', '無', '絆']
 
+
 export default function EventPage() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -27,8 +28,9 @@ export default function EventPage() {
 
   const kanji = KANJI_WATERMARKS[index % KANJI_WATERMARKS.length]
 
-  return (
-    <div className="app">
+return (
+  <div className="app">
+   
       <SlashReveal
         key={id}
         leftImage={event.slashLeft}

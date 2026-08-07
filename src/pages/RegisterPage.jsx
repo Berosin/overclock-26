@@ -4,7 +4,6 @@ import { parseTeamSize } from '../utils/teamSize.js'
 import RegistrationForm from '../components/RegistrationForm.jsx'
 import InkSplatterReveal from '../components/InkSplatterReveal.jsx'
 import WaveIntro from '../components/WaveIntro.jsx'
-
 const WAVE_DURATION = 0.9 // seconds — must match the dur values in WaveIntro.jsx
 
 export default function RegisterPage() {
@@ -33,6 +32,7 @@ export default function RegisterPage() {
 
   return (
     <div className="register-page">
+
       <WaveIntro key={`wave-${id}`} />
       <InkSplatterReveal key={`ink-${id}`} baseDelay={WAVE_DURATION} />
 

@@ -18,7 +18,6 @@ export default function HomePage() {
   return (
     <div className="app">
       {!introDone && <IntroSequence onDone={handleIntroDone} />}
-
       <Header />
       <Marquee />
       <Hero />
